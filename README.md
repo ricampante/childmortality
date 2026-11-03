@@ -4,6 +4,8 @@ Indirect estimation of infant (1q0) and under-five (5q0) mortality from summary 
 (children ever born and children dead by age of mother), as collected in the
 Brazilian census.
 
+Functions are flexible to estimate mortality at other ages (xq0). Child mortality rate (1q4) can be derived from 1q0 and 5q0. 
+
 - **Brass method**, with the variant chosen by the model life table family:
   Princeton families (North, South, East, West) give **Brass-Trussell**; UN
   families (Latam, Chilean, SAsia, FarEast, General) give
