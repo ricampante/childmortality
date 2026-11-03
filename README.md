@@ -1,6 +1,6 @@
 # childmortality
 
-Indirect estimation of infant and child mortality from summary birth histories
+Indirect estimation of infant (1q0) and under-five (5q0) mortality from summary birth histories
 (children ever born and children dead by age of mother), as collected in the
 Brazilian census.
 

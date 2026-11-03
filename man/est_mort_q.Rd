@@ -2,7 +2,7 @@
 % Please edit documentation in R/est_mort_q.R
 \name{est_mort_q}
 \alias{est_mort_q}
-\title{Indirect estimates of child mortality (Brass-Trussell / Brass-Palloni-Heligman)}
+\title{Indirect estimates of infant and under-five mortality (Brass-Trussell / Brass-Palloni-Heligman)}
 \usage{
 est_mort_q(
   data,

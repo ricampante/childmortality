@@ -1,4 +1,4 @@
-#' Indirect estimates of child mortality (Brass-Trussell / Brass-Palloni-Heligman)
+#' Indirect estimates of infant and under-five mortality (Brass-Trussell / Brass-Palloni-Heligman)
 #'
 #' The family selects the variant: Princeton families (North, South, East, West)
 #' give Brass-Trussell; UN families (Latam, Chilean, SAsia, FarEast, General) give

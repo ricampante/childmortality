@@ -66,6 +66,24 @@ dc <- function(data, age, ceb, cd, weight = NULL, sex = NULL) {
   tab[, .(i, age_group, x, dc = cd / ceb)]
 }
 
+#' Proportion of children dead, women aged 20-34
+#'
+#' `sum(cd) / sum(ceb)` with age groups 20-24, 25-29 and 30-34 pooled (not the
+#' mean of the three `dc(i)`). Neupert et al. (2019) use this statistic to build
+#' the correction factor of their indirect estimates of infant and under-five mortality for small
+#' areas, where the number of deaths of children is too small for the Brass method.
+#' @inheritParams dc
+#' @return A scalar, with attributes `"cd"` and `"ceb"` (weighted totals for ages 20-34).
+#' @references Neupert R, Fernandez Menjivar RE, Fernandez Castilla RE (2019).
+#'   "Estimação indireta da mortalidade infantil em pequenas áreas."
+#'   *Revista Brasileira de Estudos de População*, 36, 1-37.
+#'   \doi{10.20947/s0102-3098a0100}
+#' @export
+dc_20_34 <- function(data, age, ceb, cd, weight = NULL, sex = NULL) {
+  tab <- .aggregate(data, age, list(ceb = ceb, cd = cd), weight, sex)[i %in% 2:4]
+  structure(sum(tab$cd) / sum(tab$ceb), cd = sum(tab$cd), ceb = sum(tab$ceb))
+}
+
 #' Mean age at maternity
 #'
 #' Mean age of the age-specific fertility schedule:

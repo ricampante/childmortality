@@ -47,3 +47,26 @@ test_that("decimal year conversion", {
   expect_equal(childmortality:::.date_to_decimal(20100801), 2010 + 212 / 365)
   expect_error(childmortality:::.date_to_decimal("2010-08-01"))
 })
+
+test_that("dc_20_34 pools ages 20-34", {
+  # Malawi: (CEB - CS) / CEB summed over 20-24, 25-29, 30-34
+  ceb_t <- c(1038556, 1613374, 1697566)
+  cs_t <- c(919584, 1398776, 1426516)
+  r <- dc_20_34(malawi, "age", "ceb", "cd", weight = "w")
+  expect_equal(as.numeric(r), sum(ceb_t - cs_t) / sum(ceb_t))
+  expect_equal(attr(r, "ceb"), sum(ceb_t))
+
+  d <- sim_women()
+  d$w2 <- runif(nrow(d))
+  s <- list(var = "sex", female = 2)
+  a <- ceb(d, "age", "ceb", weight = "w2", sex = s)$ceb[2:4]
+  b <- cd(d, "age", "cd", weight = "w2", sex = s)$cd[2:4]
+  expect_equal(as.numeric(dc_20_34(d, "age", "ceb", "cd", weight = "w2", sex = s)),
+               sum(b) / sum(a))
+
+  # women outside 20-34 do not matter
+  d2 <- d
+  out <- d2$age < 20 | d2$age > 34
+  d2$cd[out] <- d2$ceb[out]
+  expect_equal(dc_20_34(d2, "age", "ceb", "cd"), dc_20_34(d, "age", "ceb", "cd"))
+})

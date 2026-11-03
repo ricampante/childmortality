@@ -1,10 +1,10 @@
 Package: childmortality
 Type: Package
-Title: Indirect Estimation of Infant and Child Mortality
+Title: Indirect Estimation of Infant and Under-Five Mortality
 Version: 0.0.1
 Authors@R: person("Ricardo", "Campante-Vale", email = "ricardo.vale@ipea.gov.br",
     role = c("aut", "cre"))
-Description: Indirect estimation of infant and child mortality from summary
+Description: Indirect estimation of infant (1q0) and under-five (5q0) mortality from summary
     birth histories (children ever born and children dead by age of mother),
     as collected in the Brazilian census. Implements the Brass method in the
     Trussell variant (Coale-Demeny model life tables) and the Palloni-Heligman

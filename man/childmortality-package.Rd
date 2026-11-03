@@ -4,9 +4,9 @@
 \name{childmortality-package}
 \alias{childmortality}
 \alias{childmortality-package}
-\title{childmortality: Indirect Estimation of Infant and Child Mortality}
+\title{childmortality: Indirect Estimation of Infant and Under-Five Mortality}
 \description{
-Indirect estimation of infant and child mortality from summary birth
+Indirect estimation of infant (1q0) and under-five (5q0) mortality from summary birth
 histories (children ever born and children dead by age of mother). The
 model life table family selects the variant of the Brass method:
 Princeton families (North, South, East, West) give Brass-Trussell, and UN
