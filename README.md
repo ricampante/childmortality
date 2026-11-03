@@ -4,7 +4,9 @@ Indirect estimation of infant (1q0) and under-five (5q0) mortality from summary 
 (children ever born and children dead by age of mother), as collected in the
 Brazilian census.
 
-Functions are flexible to estimate mortality at other ages (xq0). Child mortality rate (1q4) can be derived from 1q0 and 5q0. 
+The functions also estimate the probability of dying by other exact ages x,
+q(x) = xq0 (e.g. 2q0, 3q0). Child mortality (4q1) can be derived from 1q0 and
+5q0: 4q1 = (5q0 - 1q0) / (1 - 1q0).
 
 - **Brass method**, with the variant chosen by the model life table family:
   Princeton families (North, South, East, West) give **Brass-Trussell**; UN
@@ -17,7 +19,8 @@ Functions are flexible to estimate mortality at other ages (xq0). Child mortalit
   tables, to help choose the family.
 - All calculations accept survey weights and use `data.table`.
 
-Small area estimation is planned.
+Neupert et al. 2019's small area estimation correction factors  can be built with `dc_20_34()`,
+which computes the proportion of children dead among women aged 20-34.
 
 ## Installation
 
@@ -27,10 +30,7 @@ pak::pak("ricampante/childmortality")
 # or: remotes::install_github("ricampante/childmortality")
 ```
 
-While the repository is private, you need to be a collaborator and have a
-GitHub personal access token set up in R, e.g. by running
-`gitcreds::gitcreds_set()` once (or setting the `GITHUB_PAT` environment
-variable).
+The repository is public, so no GitHub token is needed.
 
 ## Example
 
@@ -66,3 +66,6 @@ See `?est_mort_q`, `?plot_mlt` and `?childmortality` for details.
 - United Nations (1990). *Step-by-Step Guide to the Estimation of Child
   Mortality*. Population Studies No. 107. New York: United Nations.
 - United Nations Population Division (2011). *Model Life Tables*.
+- Neupert R, Fernandez Menjivar RE, Fernandez Castilla RE (2019). Estimação
+  indireta da mortalidade infantil em pequenas áreas. *Revista Brasileira de
+  Estudos de População*, 36, 1-37. doi:10.20947/s0102-3098a0100
