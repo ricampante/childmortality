@@ -1,0 +1,41 @@
+Package: childmortality
+Type: Package
+Title: Indirect Estimation of Infant and Child Mortality
+Version: 0.0.1
+Authors@R: person("Ricardo", "Campante-Vale", email = "ricardo.vale@ipea.gov.br",
+    role = c("aut", "cre"))
+Description: Indirect estimation of infant and child mortality from summary
+    birth histories (children ever born and children dead by age of mother),
+    as collected in the Brazilian census. Implements the Brass method in the
+    Trussell variant (Coale-Demeny model life tables) and the Palloni-Heligman
+    variant (UN model life tables, using the mean age at maternity), with
+    coefficients from Hill 2013, IUSSP Tools for Demographic Estimation, and
+    conversion of estimates to a common index through relational logit model
+    life tables.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Depends: R (>= 4.0)
+Imports:
+    data.table,
+    graphics,
+    grDevices,
+    stats,
+    utils
+Suggests:
+    readxl,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Collate:
+    'childmortality-package.R'
+    'coefficients.R'
+    'sysdata_tables.R'
+    'mlt_child.R'
+    'utils.R'
+    'aggregates.R'
+    'brass.R'
+    'logit.R'
+    'est_mort_q.R'
+    'plot.R'
+    'plot_mlt.R'
+Config/roxygen2/version: 8.1.1
+Roxygen: list(markdown = TRUE)

@@ -1,0 +1,6 @@
+^data-raw$
+^CLAUDE\.md$
+^\.claude$
+^TO-DO\.md$
+^.*\.xlsx$
+^LICENSE\.md$

@@ -1,0 +1,25 @@
+# R
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+.Renviron
+*.Rproj
+*.rds
+*.rda
+*.RData
+*.Rcheck/
+childmortality_*.tar.gz
+.DS_Store
+
+# Data and documents
+*.pdf
+*.csv
+*.xlsx
+
+# Local notes / assistant files
+claude*
+CLAUDE*
+.claude/
+TO_DO*
+TO-DO*
