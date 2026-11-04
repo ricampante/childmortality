@@ -34,35 +34,33 @@ The repository is public, so no GitHub token is needed.
 
 ## Example
 
-Women aged 15-49 in Minas Gerais, from the 2022 Census public-access microdata
-(`?MinasGerais`). The variables keep the IBGE codes, so they are cleaned first.
+The data below are simulated, for illustration only. Each row is a woman.
 
 ```r
 library(childmortality)
 
-data("MinasGerais")
-mg <- MinasGerais
-mg$age <- 5 * mg$P0180 - 3                               # five-year group -> age
-mg$cd <- ifelse(mg$P0340 == 0, 0, mg$P0340 - mg$P0370)   # children dead
-mg$births <- as.integer(mg$P0400 %in% 1)                 # birth in the last 12 months
+set.seed(1)
+n <- 2000
+women <- data.frame(age = sample(15:49, n, replace = TRUE))
+women$ceb <- rpois(n, pmax(0, (women$age - 15) / 6))
+women$cd <- rbinom(n, women$ceb, 0.05 + (women$age - 15) / 600)
+women$births <- rbinom(n, 1, 0.12)
 
-# UN General family (Brass-Palloni-Heligman): needs births for the mean age at maternity
-est <- est_mort_q(mg, y = 5, age = "age", ceb = "P0340", cd = "cd",
+est <- est_mort_q(women, y = 5, age = "age", ceb = "ceb", cd = "cd",
                   births = "births", family = "General",
-                  ref_date = "20220801", weight = "P0110")
+                  ref_date = "20100801")
 est
 plot(est)
 
-# Choosing the model family: 1q0 and 4q1 from Brazilian vital statistics
-obs <- list("Br 2022" = c(0.01246, 0.0023), "Br 2023" = c(0.01273, 0.0022),
-            "Br 2024" = c(0.01257, 0.0022))
-plot_mlt(obs)
+# Choosing the model family (illustrative values)
+obs <- list("Survey A" = c(0.060, 0.025), "Survey B" = c(0.045, 0.015))
+plot_mlt(obs, xlim = c(0, 0.18), ylim = c(0, 0.14))
 ```
 
 See `?est_mort_q`, `?plot_mlt` and `?childmortality` for details.
 
-The vignette compares the families and uses the South family, the most adequate
-for Brazil in 2022: `vignette("MinasGerais", package = "childmortality")`. Installs from
+A worked example with real data, the 2022 Census of Minas Gerais (`data("MinasGerais")`),
+is in the vignette: `vignette("MinasGerais", package = "childmortality")`. Installs from
 GitHub do not build vignettes by default; to get it, use
 `remotes::install_github("ricampante/childmortality", build_vignettes = TRUE)`.
 
