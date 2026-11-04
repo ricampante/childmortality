@@ -134,10 +134,27 @@ q5[, .(age_group, ref_date, q_y)]
 plot(q5)
 ```
 
-As usual with the Brass method, the estimates from women aged 15-19 are biased
-upwards, because children of very young mothers face higher mortality. Those
+## Interpreting the estimates
+
+Summary birth histories only show general, long-term trends, and even those
+require careful interpretation for recent years because of selection bias,
+particularly among younger women (ages 15-24): women who have children early
+are a selected group, and their children face higher mortality. The estimates
 from the older groups refer to a more distant past and are more affected by
-recall errors. The estimates from women aged 20-34 are the most reliable.
+recall errors.
+
+q(1) and q(5) are therefore better approximated by the value for the age group
+25-29:
+
+```{r best}
+best <- rbind(q1[age_group == "25-29", .(index = "1q0", q_y)],
+              q5[age_group == "25-29", .(index = "5q0", q_y)])
+best
+```
+
+For Minas Gerais, this gives an infant mortality of
+`r round(1000 * best$q_y[1], 1)` and an under-five mortality of
+`r round(1000 * best$q_y[2], 1)` deaths per 1,000 live births.
 
 ## References
 
