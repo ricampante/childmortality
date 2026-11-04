@@ -25,9 +25,10 @@ which computes the proportion of children dead among women aged 20-34.
 ## Installation
 
 ```r
-install.packages("pak")
-pak::pak("ricampante/childmortality")
-# or: remotes::install_github("ricampante/childmortality")
+remotes::install_github("ricampante/childmortality")
+# or: download it and
+# install.packages("pak")
+# pak::pak("ricampante/childmortality")
 ```
 
 The repository is public, so no GitHub token is needed.
