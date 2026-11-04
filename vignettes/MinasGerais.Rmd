@@ -1,0 +1,149 @@
+---
+title: "Infant and under-five mortality in Minas Gerais, 2022 Census"
+output:
+  rmarkdown::html_vignette: default
+  pdf_document: default
+vignette: >
+  %\VignetteIndexEntry{Infant and under-five mortality in Minas Gerais, 2022 Census}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 4.5)
+```
+
+This vignette estimates infant (1q0) and under-five (5q0) mortality in the
+state of Minas Gerais from the summary birth history of the 2022 Brazilian
+Census, using the Brass method (Hill 2013).
+
+```{r}
+library(childmortality)
+```
+
+## Choosing the model life table family
+
+The indirect method relies on a model life table family, which sets the age
+pattern of mortality under age 5. To choose it, we compare pairs of 1q0 and
+4q1 from Brazilian vital statistics with the patterns of the model families.
+
+```{r mlt-all}
+# 1q0 and 4q1 from Brazilian vital statistics
+obs <- list("Br 2022" = c(0.01246, 0.0023),
+            "Br 2023" = c(0.01273, 0.0022),
+            "Br 2024" = c(0.01257, 0.0022))
+plot_mlt(obs)
+```
+
+Zooming in on the families closest to the observed points:
+
+```{r mlt-subset}
+plot_mlt(obs, families = c("South", "Latam", "FarEast", "Chilean"))
+```
+
+The South family (Princeton) is the most adequate for Brazil in 2022 and is
+used below.
+
+## 0. Data: Minas Gerais
+
+`MinasGerais` is a strand of the public-access microdata of the 2022 Census:
+women aged 15-49 living in the state, with the variables needed by the package
+(see `?MinasGerais`). Minas Gerais is often described as a synthesis of Brazil.
+Its regions range from the poorer, semi-arid north, close to the Brazilian
+Northeast, to the more developed south and Triângulo Mineiro, close to São
+Paulo, so the state's averages are close to the national ones.
+
+```{r data}
+data(MinasGerais)
+mg <- MinasGerais
+str(mg)
+```
+
+The variables keep the IBGE codes, so they are cleaned first:
+
+- **age**: the public-access file gives only the five-year group (`P0180`,
+  4 = 15-19, ..., 10 = 45-49). Any age inside the group works, because the
+  method only uses these groups. Here we take the midpoint, `5 * P0180 - 3`.
+- **children dead**: the census asks for children born alive (`P0340`) and
+  children alive (`P0370`), so children dead are the difference. `P0370` is
+  blank for women with no children, who have no dead children.
+- **births in the last 12 months**: `P0400` is 1 = yes, 2 = no and blank for
+  women with no children.
+
+```{r clean}
+mg$age <- 5 * mg$P0180 - 3
+mg$cd <- ifelse(mg$P0340 == 0, 0, mg$P0340 - mg$P0370)
+mg$births <- as.integer(mg$P0400 %in% 1)
+```
+
+Every function takes the weight (`P0110`) and, optionally, the sex filter.
+The file only has women, so the filter is shown for completeness.
+
+```{r args}
+w <- "P0110"
+female <- list(var = "P0150", female = 2)
+```
+
+## 1. Parity ratios
+
+Average parity by age group of mother and the proportion of children dead:
+
+```{r parity}
+p <- avg_p(mg, "age", "P0340", weight = w, sex = female)
+d <- dc(mg, "age", "P0340", "cd", weight = w, sex = female)
+merge(p, d, by = c("i", "age_group", "x"))
+```
+
+The parity ratios P(1)/P(2) and P(2)/P(3) enter the multipliers and the
+time reference of the estimates:
+
+```{r ratios}
+c("P(1)/P(2)" = p$avg_p[1] / p$avg_p[2],
+  "P(2)/P(3)" = p$avg_p[2] / p$avg_p[3])
+```
+
+## 2. Mean age at maternity
+
+```{r maam}
+m <- maam(mg, "age", "births", weight = w, sex = female)
+m
+```
+
+The mean age at maternity is only used by the UN families
+(Brass-Palloni-Heligman variant). The South family is a Princeton family
+(Brass-Trussell variant, with `d(i) = 0`), so M does **not** enter the
+estimates below.
+
+## 3. Infant (1q0) and under-five (5q0) mortality
+
+The reference date of the 2022 Census is 1 August 2022.
+
+```{r q1}
+q1 <- est_mort_q(mg, y = 1, age = "age", ceb = "P0340", cd = "cd",
+                 family = "South", ref_date = "20220801",
+                 weight = w, sex = female)
+q1
+plot(q1)
+```
+
+```{r q5}
+q5 <- est_mort_q(mg, y = 5, age = "age", ceb = "P0340", cd = "cd",
+                 family = "South", ref_date = "20220801",
+                 weight = w, sex = female)
+q5[, .(age_group, ref_date, q_y)]
+plot(q5)
+```
+
+As usual with the Brass method, the estimates from women aged 15-19 are biased
+upwards, because children of very young mothers face higher mortality. Those
+from the older groups refer to a more distant past and are more affected by
+recall errors. The estimates from women aged 20-34 are the most reliable.
+
+## References
+
+Hill K (2013). Indirect estimation of child mortality. In Moultrie TA et al.
+(eds), *Tools for Demographic Estimation*. Paris: IUSSP.
+<https://demographicestimation.iussp.org/content/indirect-estimation-child-mortality>
+
+IBGE. Censo Demográfico 2022, microdados (acesso público).
+<https://www.ibge.gov.br/estatisticas/sociais/trabalho/22827-censo-demografico-2022.html?=&t=microdados>

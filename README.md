@@ -59,6 +59,11 @@ plot_mlt(obs, xlim = c(0, 0.18), ylim = c(0, 0.14))
 
 See `?est_mort_q`, `?plot_mlt` and `?childmortality` for details.
 
+A worked example with real data, the 2022 Census of Minas Gerais (`data("MinasGerais")`),
+is in the vignette: `vignette("MinasGerais", package = "childmortality")`. Installs from
+GitHub do not build vignettes by default; to get it, use
+`remotes::install_github("ricampante/childmortality", build_vignettes = TRUE)`.
+
 ## References
 
 - Hill K (2013). Indirect estimation of child mortality. In Moultrie TA et al.

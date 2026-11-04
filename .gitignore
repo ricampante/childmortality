@@ -23,3 +23,6 @@ CLAUDE*
 .claude/
 TO_DO*
 TO-DO*
+
+# Package data (exception to *.rda above)
+!data/*.rda

@@ -5,3 +5,9 @@
 ^.*\.xlsx$
 ^LICENSE\.md$
 ^.*\.png$
+^.*\.csv$
+^vignette1_prototype\.R$
+^~\$
+^MinasGerais\.(html|pdf)$
+^doc$
+^Meta$
